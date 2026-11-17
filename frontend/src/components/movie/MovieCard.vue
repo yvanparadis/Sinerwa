@@ -10,7 +10,8 @@
         <span v-if="item.translator" class="translator">🎬 {{ item.translator }}</span>
       </div>
       <div class="overlay-actions">
-        <button class="btn btn-primary btn-sm" @click.stop="play">Watch</button>
+        <button v-if="item.playbackType && item.playbackType !== 'METADATA_ONLY'" class="btn btn-primary btn-sm" @click.stop="play">Watch</button>
+        <button v-else class="btn btn-ghost btn-sm" disabled title="No authorized playback source">Unavailable</button>
         <button class="btn btn-ghost btn-sm" @click.stop="go">Details</button>
         <button class="btn btn-ghost btn-icon btn-sm" :class="{ active: inList }" @click.stop="toggleList" :aria-label="inList ? 'Remove from My List' : 'Add to My List'">
           {{ inList ? "✓" : "+" }}
