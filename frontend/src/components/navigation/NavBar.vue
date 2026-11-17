@@ -2,7 +2,7 @@
   <header class="navbar">
     <div class="container nav-inner">
       <router-link to="/" class="brand">
-        <img src="/logo-compact.svg" alt="CineRwa" class="brand-logo" />
+        <img src="/logo.png" alt="CineRwa" class="brand-logo" />
       </router-link>
 
       <nav class="nav-links">

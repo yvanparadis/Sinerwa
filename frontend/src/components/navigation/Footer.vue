@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <img src="/logo-primary.svg" alt="CineRwa" height="36" />
+        <img src="/logo.png" alt="CineRwa" height="36" />
         <p class="footer-tagline">Your World of Cinema.</p>
       </div>
       <div class="footer-links">

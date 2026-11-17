@@ -2,7 +2,7 @@
   <div class="mobile-menu-overlay" @click="ui.closeMobileMenu">
     <nav class="mobile-menu" @click.stop>
       <div class="mobile-menu-header">
-        <img src="/logo-compact.svg" alt="CineRwa" height="28" />
+        <img src="/logo.png" alt="CineRwa" height="28" />
         <button class="btn btn-ghost btn-icon" @click="ui.closeMobileMenu" aria-label="Close">✕</button>
       </div>
       <router-link v-for="l in links" :key="l.to" :to="l.to" class="mobile-link" @click="ui.closeMobileMenu">
