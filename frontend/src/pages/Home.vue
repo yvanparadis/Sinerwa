@@ -2,6 +2,7 @@
   <div class="home">
     <HeroSlider :slides="slides" />
     <div class="container">
+      <Top10 :items="top10" />
       <MovieRow v-if="trending.length" title="Trending Now" :items="trending" :loading="loading" :error="error" see-all-to="/movies" @retry="load" />
       <MovieRow v-if="popular.length" title="Popular Movies" :items="popular" :loading="loading" see-all-to="/movies" />
       <MovieRow v-if="recent.length" title="Recently Added" :items="recent" :loading="loading" />
@@ -14,6 +15,7 @@
 import { ref, computed, onMounted } from "vue";
 import HeroSlider from "@/components/movie/HeroSlider.vue";
 import MovieRow from "@/components/movie/MovieRow.vue";
+import Top10 from "@/components/movie/Top10.vue";
 import { movieService } from "@/services/movieService";
 
 const all = ref([]);
@@ -21,6 +23,7 @@ const trending = ref([]);
 const popular = ref([]);
 const recent = ref([]);
 const recommended = ref([]);
+const top10 = computed(() => [...all.value].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 10));
 const loading = ref(true);
 const error = ref(false);
 

@@ -8,12 +8,8 @@
       <nav class="nav-links">
         <router-link to="/" class="nav-link">Home</router-link>
         <router-link to="/movies" class="nav-link">Movies</router-link>
+        <router-link to="/series" class="nav-link">TV Shows</router-link>
         <router-link to="/series" class="nav-link">Series</router-link>
-        <router-link to="/search" class="nav-link">Search</router-link>
-        <router-link to="/my-list" class="nav-link">My List</router-link>
-        <router-link to="/about" class="nav-link">About</router-link>
-        <router-link to="/providers" class="nav-link">Providers</router-link>
-        <router-link to="/storage" class="nav-link">Storage</router-link>
       </nav>
 
       <div class="nav-actions">
@@ -29,8 +25,7 @@
           <button class="btn btn-ghost btn-sm" @click="auth.logout()">Sign out</button>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn btn-ghost btn-sm">Sign in</router-link>
-          <router-link to="/register" class="btn btn-primary btn-sm">Register</router-link>
+          <router-link to="/login" class="btn btn-primary btn-sm">Login</router-link>
         </template>
         <button class="btn btn-ghost btn-icon mobile-toggle" @click="ui.toggleMobileMenu" aria-label="Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -54,10 +49,10 @@ const auth = useAuthStore();
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(9, 9, 13, 0.85);
+  background: rgba(8, 8, 8, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-  height: var(--nav-height);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  height: 56px;
 }
 .nav-inner {
   height: 100%;
