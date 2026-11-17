@@ -179,6 +179,12 @@ async def sync_provider(db: Session, provider_id: str) -> SyncHistory:
                     external_title=title,
                 ))
             created += 1
+            try:
+                from app.services.genre_service import classify_movie, ensure_genres_from_tmdb
+                ensure_genres_from_tmdb(db)
+                classify_movie(db, movie)
+            except Exception:
+                pass
         except Exception as e:
             failed += 1
             errors.append(str(e))

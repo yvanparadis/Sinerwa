@@ -41,6 +41,14 @@ class Settings(BaseSettings):
     gcs_credentials_json: str = ""  # path to service account JSON or inline
     gcs_public_delivery_base_url: str = ""
 
+    # Backblaze B2
+    b2_key_id: str = ""
+    b2_application_key: str = ""
+    b2_bucket: str = ""
+    b2_endpoint: str = ""  # e.g. https://s3.us-west-004.backblazeb2.com
+    b2_public_delivery_base_url: str = ""
+    b2_max_upload_bytes: int = 5 * 1024 * 1024 * 1024  # 5 GB
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

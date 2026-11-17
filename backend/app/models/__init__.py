@@ -9,6 +9,7 @@ from app.models.provider import (
 )
 from app.models.user import User
 from app.models.watchlist import WatchlistItem
+from app.models.genre import Genre, movie_genres
 
 __all__ = [
     "Provider",
@@ -20,4 +21,6 @@ __all__ = [
     "gen_uuid",
     "User",
     "WatchlistItem",
+    "Genre",
+    "movie_genres",
 ]

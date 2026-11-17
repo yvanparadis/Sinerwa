@@ -58,6 +58,7 @@ class Movie(Base):
     provider = relationship("Provider", back_populates="movies")
     identifiers = relationship("ExternalMovieIdentifier", back_populates="movie", cascade="all, delete-orphan")
     availability = relationship("MovieAvailability", back_populates="movie", cascade="all, delete-orphan")
+    genre_links = relationship("Genre", secondary="movie_genres", backref="movies")
 
 
 class ExternalMovieIdentifier(Base):
