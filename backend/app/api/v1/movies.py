@@ -60,7 +60,7 @@ def list_movies(db: Session = Depends(get_db)):
             "poster": m.poster,
             "backdrop": m.backdrop,
             "releaseDate": m.release_date,
-            "genres": m.genres or [],
+            "genres": [g.name for g in (m.genre_links or [])] or (m.genres or []),
             "language": m.language,
             "rating": m.rating,
             "runtime": m.runtime,

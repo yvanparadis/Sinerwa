@@ -41,14 +41,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import MovieCard from "@/components/movie/MovieCard.vue";
 import SkeletonBox from "@/components/common/SkeletonBox.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import { movieService } from "@/services/movieService";
-import { genres as allGenres, translators as allTranslators } from "@/data/movies";
+import { translators as allTranslators } from "@/data/movies";
+const allGenres = ref([]);
 
-const genres = allGenres.map((g) => ({ name: g.name }));
+const genres = computed(() => allGenres.value.map((g) => ({ name: typeof g === "string" ? g : (g.name || g) })));
 const languages = ["English", "French", "Kinyarwanda", "Swahili", "Spanish"];
 const translators = allTranslators;
 
@@ -63,6 +64,14 @@ const filtered = ref([]);
 
 async function load() {
   loading.value = true;
+  const API = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+  try {
+    const gRes = await fetch(`${API}/api/v1/genres`);
+    if (gRes.ok) {
+      const gd = await gRes.json();
+      allGenres.value = gd.genres || [];
+    }
+  } catch (e) {}
   all.value = await movieService.getAllMovies();
   apply();
   loading.value = false;
