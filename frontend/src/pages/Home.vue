@@ -42,12 +42,24 @@ async function load() {
   loading.value = true;
   error.value = false;
   try {
+    const API = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
     const [a, t, p, r] = await Promise.all([
       movieService.getAllMovies(),
       movieService.getTrending(),
       movieService.getPopular(),
       movieService.getRecentlyAdded(),
     ]);
+    // Extra sections from TMDB
+    let topRated = [];
+    let upcoming = [];
+    try {
+      const tr = await fetch(`${API}/api/v1/tmdb/top_rated`);
+      if (tr.ok) { const d = await tr.json(); topRated = d.results || []; }
+    } catch (e) {}
+    try {
+      const up = await fetch(`${API}/api/v1/tmdb/upcoming`);
+      if (up.ok) { const d = await up.json(); upcoming = d.results || []; }
+    } catch (e) {}
     // recommendations from backend
     let rec = [];
     try {

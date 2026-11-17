@@ -18,10 +18,11 @@ class Settings(BaseSettings):
 
     # TMDB (never expose to frontend)
     tmdb_api_key: str = ""
+    tmdb_access_token: str = ""
     tmdb_base_url: str = "https://api.themoviedb.org/3"
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"]
+    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "https://cinerwa.vercel.app"]
 
     # Cloudflare R2
     r2_account_id: str = ""

@@ -53,6 +53,7 @@
         <h2>Credits & Attribution</h2>
         <p>
           Movie metadata is provided by TMDB, subject to its licensing and attribution requirements.
+          "This product uses the TMDB API but is not endorsed or certified by TMDB."
           Images and artwork are provided by authorized metadata sources. This is Phase 02 of a larger project.
         </p>
       </section>
