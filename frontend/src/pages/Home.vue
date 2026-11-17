@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <HeroSlider :slides="slides" />
+    <ContinueWatching :items="continueWatching" />
     <div class="container">
       <Top10 :items="top10" />
       <MovieRow v-if="trending.length" title="Trending Now" :items="trending" :loading="loading" :error="error" see-all-to="/movies" @retry="load" />
@@ -16,6 +17,8 @@ import { ref, computed, onMounted } from "vue";
 import HeroSlider from "@/components/movie/HeroSlider.vue";
 import MovieRow from "@/components/movie/MovieRow.vue";
 import Top10 from "@/components/movie/Top10.vue";
+import ContinueWatching from "@/components/movie/ContinueWatching.vue";
+import { useWatchProgressStore } from "@/stores/watchProgress";
 import { movieService } from "@/services/movieService";
 
 const all = ref([]);
@@ -23,7 +26,25 @@ const trending = ref([]);
 const popular = ref([]);
 const recent = ref([]);
 const recommended = ref([]);
+const progressStore = useWatchProgressStore();
 const top10 = computed(() => [...all.value].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 10));
+const continueWatching = computed(() => {
+  const map = new Map(all.value.map((m) => [m.id, m]));
+  return progressStore.recent(12).map((p) => {
+    const m = map.get(p.id);
+    if (!m) return null;
+    const percent = p.duration ? Math.min(100, (p.time / p.duration) * 100) : 0;
+    const remaining = p.duration ? formatTime(p.duration - p.time) : "";
+    return { ...m, percent, remaining };
+  }).filter(Boolean);
+});
+
+function formatTime(t) {
+  if (!t || isNaN(t)) return "0:00";
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
 const loading = ref(true);
 const error = ref(false);
 

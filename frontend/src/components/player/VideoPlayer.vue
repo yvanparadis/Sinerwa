@@ -57,7 +57,7 @@ const props = defineProps({
   poster: { type: String, default: "" },
   subtitle: { type: String, default: "" },
 });
-defineEmits(["error"]);
+const emit = defineEmits(["error", "progress"]);
 
 const videoRef = ref(null);
 const playing = ref(false);
@@ -106,6 +106,7 @@ function onTimeUpdate() {
   currentTime.value = v.currentTime;
   duration.value = v.duration || 0;
   progress.value = duration.value ? (currentTime.value / duration.value) * 100 : 0;
+  emit("progress", { time: currentTime.value, duration: duration.value });
 }
 function onLoaded() {
   const v = videoRef.value;

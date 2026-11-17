@@ -11,7 +11,7 @@
       </div>
 
       <div v-else-if="isLocal" class="player-wrap">
-        <VideoPlayer :src="videoSrc" :poster="item.backdrop" />
+        <VideoPlayer :src="videoSrc" :poster="item.backdrop" @progress="onProgress" />
       </div>
 
       <div v-else-if="isExternalUrl" class="external-wrap">
@@ -51,10 +51,18 @@ import VideoPlayer from "@/components/player/VideoPlayer.vue";
 import SkeletonBox from "@/components/common/SkeletonBox.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import { movieService } from "@/services/movieService";
+import { useWatchProgressStore } from "@/stores/watchProgress";
 
 const route = useRoute();
 const item = ref(null);
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+const progressStore = useWatchProgressStore();
+
+function onProgress(p) {
+  if (item.value && p.duration) {
+    progressStore.update(item.value.id, p.time, p.duration);
+  }
+}
 
 const isLocal = computed(() => item.value && item.value.playbackType === "LOCAL_FILE");
 const isExternalUrl = computed(() => item.value && item.value.playbackType === "AUTHORIZED_EXTERNAL_URL");
