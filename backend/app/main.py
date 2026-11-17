@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.core.database import Base, engine
 from app.api.v1 import api_router
-from app.models import Provider, User, WatchlistItem  # noqa: F401
+from app.models import Provider, User, WatchlistItem, YouTubeTrailer  # noqa: F401
 
 settings = get_settings()
 

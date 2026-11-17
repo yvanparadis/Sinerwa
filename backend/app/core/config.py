@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     tmdb_access_token: str = ""
     tmdb_base_url: str = "https://api.themoviedb.org/3"
 
+    # YouTube Data API v3
+    youtube_api_key: str = ""
+
     # CORS
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "https://cinerwa.vercel.app"]
 

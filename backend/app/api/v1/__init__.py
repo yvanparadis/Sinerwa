@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import health, movies, providers, tmdb, local_media, storage, auth, watchlist, search, recommendations, genres
+from app.api.v1 import health, movies, providers, tmdb, local_media, storage, auth, watchlist, search, recommendations, genres, trailers
 
 api_router = APIRouter()
 api_router.include_router(health.router)
@@ -13,3 +13,4 @@ api_router.include_router(watchlist.router)
 api_router.include_router(search.router)
 api_router.include_router(recommendations.router)
 api_router.include_router(genres.router)
+api_router.include_router(trailers.router)

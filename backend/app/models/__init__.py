@@ -10,6 +10,7 @@ from app.models.provider import (
 from app.models.user import User
 from app.models.watchlist import WatchlistItem
 from app.models.genre import Genre, movie_genres
+from app.models.youtube_trailer import YouTubeTrailer
 
 __all__ = [
     "Provider",
@@ -23,4 +24,5 @@ __all__ = [
     "WatchlistItem",
     "Genre",
     "movie_genres",
+    "YouTubeTrailer",
 ]

@@ -61,6 +61,10 @@
           <iframe :src="trailer" title="Trailer" frameborder="0" allowfullscreen></iframe>
         </div>
       </section>
+      <section class="section" v-else>
+        <h2>Trailer</h2>
+        <p class="no-trailer">No verified trailer available for this title.</p>
+      </section>
     </div>
   </div>
   <div v-else class="page container">
@@ -83,13 +87,25 @@ const item = ref(null);
 
 const cast = ["Amina Uwase", "Jean Bosco", "Grace Mutoni", "Eric Habimana"];
 const trailer = ref(null);
+const trailerStatus = ref("not_found");
 
 const inList = computed(() => (item.value ? watchlist.contains(item.value.id) : false));
 
 onMounted(async () => {
   item.value = await movieService.getMovieById(route.params.id);
-  // Demo trailer (YouTube embed placeholder)
-  trailer.value = "https://www.youtube.com/embed/dQw4w9WgXcQ";
+  const API = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+  try {
+    const res = await fetch(`${API}/api/v1/trailers/${encodeURIComponent(route.params.id)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.trailer && data.trailer.embed_url) {
+        trailer.value = data.trailer.embed_url;
+        trailerStatus.value = data.status || "verified";
+      } else {
+        trailerStatus.value = "not_found";
+      }
+    }
+  } catch (e) {}
 });
 
 function watch() {
