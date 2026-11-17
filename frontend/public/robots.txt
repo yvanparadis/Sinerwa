@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /my-list
+Disallow: /providers
+Disallow: /storage
+Disallow: /local
+Disallow: /watch/
+
+Sitemap: https://cinerwa.vercel.app/sitemap.xml

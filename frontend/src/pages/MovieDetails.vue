@@ -79,6 +79,7 @@ import AppButton from "@/components/common/AppButton.vue";
 import SkeletonBox from "@/components/common/SkeletonBox.vue";
 import { movieService } from "@/services/movieService";
 import { useWatchlistStore } from "@/stores/watchlist";
+import { setSeo } from "@/composables/useSeo";
 
 const route = useRoute();
 const router = useRouter();
@@ -106,6 +107,27 @@ onMounted(async () => {
       }
     }
   } catch (e) {}
+  if (item.value) {
+    const m = item.value;
+    setSeo({
+      title: `${m.title} — CineRwa`,
+      description: (m.overview || "").slice(0, 160),
+      canonical: `https://cinerwa.vercel.app/movie/${m.id}`,
+      ogTitle: m.title,
+      ogDescription: (m.overview || "").slice(0, 160),
+      ogImage: m.poster,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Movie",
+        "name": m.title,
+        "description": m.overview,
+        "image": m.poster,
+        "datePublished": m.releaseDate,
+        "genre": m.genres,
+        "aggregateRating": m.rating ? { "@type": "AggregateRating", "ratingValue": m.rating, "bestRating": 10 } : undefined,
+      },
+    });
+  }
 });
 
 function watch() {

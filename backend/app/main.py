@@ -80,4 +80,12 @@ def root():
     return {"name": "CineRwa API", "version": settings.app_version, "docs": "/docs"}
 
 
+@app.get("/sitemap.xml")
+def root_sitemap():
+    from app.services.sitemap_service import generate_sitemap
+    from fastapi.responses import Response
+    xml = generate_sitemap()
+    return Response(content=xml, media_type="application/xml")
+
+
 app.include_router(api_router, prefix=settings.api_v1_prefix)

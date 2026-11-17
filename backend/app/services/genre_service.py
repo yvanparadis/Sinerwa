@@ -18,7 +18,7 @@ def slugify(name: str) -> str:
 
 def ensure_genres_from_tmdb(db: Session) -> List[Genre]:
     adapter = TMDBAdapter()
-    # Try API
+    raw = []
     try:
         import asyncio
         loop = asyncio.new_event_loop()
