@@ -39,13 +39,22 @@ async function load() {
   loading.value = true;
   error.value = false;
   try {
-    const [a, t, p, r, rec] = await Promise.all([
+    const [a, t, p, r] = await Promise.all([
       movieService.getAllMovies(),
       movieService.getTrending(),
       movieService.getPopular(),
       movieService.getRecentlyAdded(),
-      movieService.getRecommended(),
     ]);
+    // recommendations from backend
+    let rec = [];
+    try {
+      const res = await fetch((import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000") + "/api/v1/recommendations");
+      if (res.ok) {
+        const d = await res.json();
+        rec = d.items || [];
+      }
+    } catch (e) { /* ignore */ }
+    if (!rec.length) rec = a.slice(2, 10);
     all.value = a;
     trending.value = t;
     popular.value = p;
