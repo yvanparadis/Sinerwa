@@ -50,12 +50,14 @@ const error = ref(false);
 
 const slides = computed(() => {
   if (!all.value.length) return [];
-  const sorted = [...all.value].sort((a, b) => (b.rating || 0) - (a.rating || 0));
-  const possibleLove = all.value.find((m) => (m.title || "").toLowerCase() === "possible love");
-  const others = sorted.filter((m) => (m.title || "").toLowerCase() !== "possible love").slice(0, 7);
+  const avengers = all.value.find((m) => (m.title || "").toLowerCase().includes("avengers") && (m.title || "").toLowerCase().includes("doomsday"));
+  const latest = [...all.value]
+    .filter((m) => m.id !== (avengers && avengers.id))
+    .sort((a, b) => new Date(b.releaseDate || 0) - new Date(a.releaseDate || 0))
+    .slice(0, 7);
   const result = [];
-  if (possibleLove) result.push(possibleLove);
-  result.push(...others);
+  if (avengers) result.push(avengers);
+  result.push(...latest);
   return result.slice(0, 8);
 });
 
