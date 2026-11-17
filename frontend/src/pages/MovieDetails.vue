@@ -155,3 +155,4 @@ function toggleList() {
 .trailer-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
 @media (max-width: 700px) { .details-content { grid-template-columns: 1fr; } .details-poster { max-width: 200px; } }
 </style>
+

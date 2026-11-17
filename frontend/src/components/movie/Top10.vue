@@ -8,7 +8,7 @@
       <div class="top10-row">
         <div v-for="(item, i) in items" :key="item.id" class="top10-card" @click="go(item)">
           <span class="rank">{{ i + 1 }}</span>
-          <img :src="item.poster" :alt="item.title" loading="lazy" />
+          <img :src="item.poster" :alt="item.title" loading="lazy" decoding="async" />
         </div>
       </div>
     </div>
@@ -76,3 +76,4 @@ function go(item) {
   pointer-events: none;
 }
 </style>
+

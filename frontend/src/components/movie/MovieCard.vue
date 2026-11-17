@@ -1,6 +1,6 @@
 <template>
   <article class="movie-card" @click="go">
-    <img :src="item.poster" :alt="item.title" loading="lazy" />
+    <img :src="item.poster" :alt="item.title" loading="lazy" decoding="async" />
     <div class="overlay">
       <div class="overlay-title">{{ item.title }}</div>
       <div class="overlay-meta">
@@ -95,3 +95,4 @@ button.active {
   border-color: var(--color-primary-purple);
 }
 </style>
+

@@ -102,3 +102,4 @@ function toggleList() {
 .season-card p { color: var(--color-secondary-text); font-size: var(--text-sm); margin: 0; }
 @media (max-width: 700px) { .details-content { grid-template-columns: 1fr; } .details-poster { max-width: 200px; } }
 </style>
+

@@ -179,3 +179,4 @@ onBeforeUnmount(() => {
   .hero-title { font-size: var(--text-3xl); }
 }
 </style>
+
