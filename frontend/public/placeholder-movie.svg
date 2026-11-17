@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" width="300" height="450">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#171525"/>
+      <stop offset="100%" stop-color="#09090D"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="450" fill="url(#g)"/>
+  <g fill="#8B5CF6" opacity="0.6">
+    <circle cx="150" cy="180" r="40"/>
+    <path d="M135 165 L135 195 L170 180 Z" fill="#fff"/>
+  </g>
+  <text x="150" y="300" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="18" font-weight="700" fill="#C4B5FD">CineRwa</text>
+  <text x="150" y="325" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#A1A1AA">Local Media</text>
+</svg>
