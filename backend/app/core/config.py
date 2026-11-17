@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     r2_max_upload_bytes: int = 100 * 1024 * 1024  # 100 MB default
     r2_warning_threshold_bytes: int = 9 * 1024 * 1024 * 1024  # 9 GB (free tier 10GB)
 
+    # Google Cloud Storage
+    gcs_project_id: str = ""
+    gcs_bucket: str = ""
+    gcs_credentials_json: str = ""  # path to service account JSON or inline
+    gcs_public_delivery_base_url: str = ""
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

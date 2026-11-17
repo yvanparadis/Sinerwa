@@ -39,6 +39,10 @@ def _local_items():
     return out
 
 
+# Simple in-process cache for stateless deployments (e.g. Vercel)
+_CACHE = {"movies": None}
+
+
 @router.get("")
 def list_movies(db: Session = Depends(get_db)):
     rows = db.query(Movie).order_by(Movie.created_at.desc()).all()
@@ -95,6 +99,47 @@ def list_movies(db: Session = Depends(get_db)):
             "translator": li["translator"],
             "createdAt": None,
         })
+    # If DB is empty (stateless env like Vercel), fetch from TMDB on demand
+    if not items:
+        if _CACHE["movies"]:
+            items = _CACHE["movies"]
+        else:
+            try:
+                from app.core.config import get_settings
+                settings = get_settings()
+                if settings.tmdb_api_key:
+                    import asyncio
+                    from app.integrations.tmdb_adapter import TMDBAdapter
+                    from app.services.normalization import normalize_tmdb
+                    adapter = TMDBAdapter()
+                    loop = asyncio.new_event_loop()
+                    raw = loop.run_until_complete(adapter.popular(1))
+                    loop.close()
+                    for r in (raw or []):
+                        n = normalize_tmdb(r)
+                        items.append({
+                            "id": f"tmdb:{n.get('externalId')}",
+                            "title": n["title"],
+                            "overview": n["overview"],
+                            "poster": n["poster"],
+                            "backdrop": n["backdrop"],
+                            "releaseDate": n["releaseDate"],
+                            "genres": n["genres"],
+                            "language": n["language"],
+                            "rating": n["rating"],
+                            "runtime": n["runtime"],
+                            "contentType": "movie",
+                            "source": "tmdb",
+                            "playbackType": "METADATA_ONLY",
+                            "availabilityStatus": "metadata_only",
+                            "providerId": "tmdb",
+                            "externalWatchUrl": None,
+                            "translator": None,
+                            "createdAt": None,
+                        })
+                    _CACHE["movies"] = items
+            except Exception:
+                pass
     return {"items": items, "total": len(items)}
 
 
@@ -123,6 +168,40 @@ def get_movie(movie_id: str, db: Session = Depends(get_db)):
                     "externalWatchUrl": li["externalWatchUrl"],
                     "translator": li["translator"],
                 }
+        raise HTTPException(status_code=404, detail="Movie not found")
+    if movie_id.startswith("tmdb:"):
+        eid = movie_id[len("tmdb:"):]
+        try:
+            from app.integrations.tmdb_adapter import TMDBAdapter
+            from app.services.normalization import normalize_tmdb
+            adapter = TMDBAdapter()
+            import asyncio
+            loop = asyncio.new_event_loop()
+            raw = loop.run_until_complete(adapter.details(int(eid)))
+            loop.close()
+            if raw:
+                n = normalize_tmdb(raw)
+                return {
+                    "id": movie_id,
+                    "title": n["title"],
+                    "overview": n["overview"],
+                    "poster": n["poster"],
+                    "backdrop": n["backdrop"],
+                    "releaseDate": n["releaseDate"],
+                    "genres": n["genres"],
+                    "language": n["language"],
+                    "rating": n["rating"],
+                    "runtime": n["runtime"],
+                    "contentType": "movie",
+                    "source": "tmdb",
+                    "playbackType": "METADATA_ONLY",
+                    "availabilityStatus": "metadata_only",
+                    "providerId": "tmdb",
+                    "externalWatchUrl": None,
+                    "translator": None,
+                }
+        except Exception:
+            pass
         raise HTTPException(status_code=404, detail="Movie not found")
     m = db.query(Movie).filter(Movie.id == movie_id).first()
     if not m:

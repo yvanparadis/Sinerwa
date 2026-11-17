@@ -2,6 +2,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Header
 from typing import Optional
 from app.services.storage import get_storage_provider, storage_status
+from app.services.gcs_storage import GCSStorageProvider
 from app.core.config import get_settings
 
 router = APIRouter(prefix="/storage", tags=["storage"])
@@ -18,6 +19,16 @@ def require_admin(x_admin_token: Optional[str] = Header(None)):
 @router.get("/status")
 def get_status():
     return storage_status()
+
+
+@router.get("/gcs/status")
+def gcs_status():
+    p = GCSStorageProvider()
+    return {
+        "configured": p.configured(),
+        "bucket": settings.gcs_bucket or None,
+        "test": p.test_connection() if p.configured() else {"ok": False, "error": "Not configured"},
+    }
 
 
 @router.post("/test")
