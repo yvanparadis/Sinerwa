@@ -12,9 +12,17 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./cinerwa.db"
 
     # JWT
-    secret_key: str = "change-me-in-production-please"
+    secret_key: str = ""
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24
+
+    @property
+    def _secret_key_safe(self) -> str:
+        if self.secret_key:
+            return self.secret_key
+        if self.debug:
+            return "dev-only-insecure-secret-change-in-production"
+        raise RuntimeError("SECRET_KEY must be set in production")
 
     # TMDB (never expose to frontend)
     tmdb_api_key: str = ""
@@ -25,7 +33,10 @@ class Settings(BaseSettings):
     youtube_api_key: str = ""
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "https://cinerwa.vercel.app"]
+    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "https://cinerwa.vercel.app", "http://localhost:5175", "https://admin-cinerwa.vercel.app"]
+
+    # Owner allowlist (comma-separated emails)
+    owner_emails: str = ""
 
     # Cloudflare R2
     r2_account_id: str = ""

@@ -8,7 +8,7 @@ settings = get_settings()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ALGORITHM = settings.algorithm
-SECRET_KEY = settings.secret_key
+SECRET_KEY = settings._secret_key_safe
 EXPIRE_MINUTES = settings.access_token_expire_minutes
 
 

@@ -11,6 +11,8 @@ from app.models.user import User
 from app.models.watchlist import WatchlistItem
 from app.models.genre import Genre, movie_genres
 from app.models.youtube_trailer import YouTubeTrailer
+from app.models.intelligence import ClassificationHistory, ProcessingStatus
+from app.models.audit_log import AuditLog
 
 __all__ = [
     "Provider",
@@ -25,4 +27,7 @@ __all__ = [
     "Genre",
     "movie_genres",
     "YouTubeTrailer",
+    "ClassificationHistory",
+    "ProcessingStatus",
+    "AuditLog",
 ]

@@ -1,11 +1,29 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.core.database import Base, engine
 from app.api.v1 import api_router
-from app.models import Provider, User, WatchlistItem, YouTubeTrailer  # noqa: F401
+from app.models import Provider, User, WatchlistItem, YouTubeTrailer, ClassificationHistory, ProcessingStatus, AuditLog  # noqa: F401
+import time
 
 settings = get_settings()
+
+# Simple in-memory rate limiter
+_rate_buckets = {}
+RATE_LIMIT = 60  # requests per minute per IP
+RATE_WINDOW = 60
+
+
+def _rate_limit(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    bucket = _rate_buckets.get(ip, [])
+    bucket = [t for t in bucket if now - t < RATE_WINDOW]
+    if len(bucket) >= RATE_LIMIT:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Try again later.")
+    bucket.append(now)
+    _rate_buckets[ip] = bucket
 
 app = FastAPI(
     title=settings.app_name,
@@ -13,6 +31,16 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    try:
+        _rate_limit(request)
+    except Exception as e:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=429, content={"detail": str(e)})
+    return await call_next(request)
 
 @app.on_event("startup")
 def create_tables():

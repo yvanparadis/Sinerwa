@@ -12,7 +12,9 @@ ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 
 
 def require_admin(x_admin_token: Optional[str] = Header(None)):
-    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
+    if not ADMIN_TOKEN:
+        raise HTTPException(status_code=503, detail="Admin token not configured. Storage management disabled.")
+    if x_admin_token != ADMIN_TOKEN:
         raise HTTPException(status_code=403, detail="Admin authorization required.")
 
 

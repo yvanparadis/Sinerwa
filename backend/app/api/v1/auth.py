@@ -31,6 +31,12 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
+def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    if not current_user.is_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    return current_user
+
+
 @router.post("/register", response_model=TokenResponse)
 def register(req: RegisterRequest, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == req.email).first():
@@ -39,7 +45,11 @@ def register(req: RegisterRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already taken")
     if len(req.password) < 6:
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
-    user = User(email=req.email, username=req.username, hashed_password=hash_password(req.password))
+    from app.core.config import get_settings
+    settings = get_settings()
+    owner_emails = [e.strip().lower() for e in (settings.owner_emails or "").split(",") if e.strip()]
+    is_admin = req.email.lower() in owner_emails
+    user = User(email=req.email, username=req.username, hashed_password=hash_password(req.password), is_admin=is_admin)
     db.add(user)
     db.commit()
     db.refresh(user)
